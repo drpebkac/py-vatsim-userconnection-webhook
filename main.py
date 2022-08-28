@@ -13,13 +13,6 @@ url = sys.argv[2]
 username = sys.argv[3]
 
 def create_Body():
-    print(name)
-    print(callsign)
-    print(squawk)
-    print(aircraft)
-    print(dep)
-    print(arr)
-
     #Content body
     jsoncontent = {
       "username": username,
