@@ -7,16 +7,39 @@ from datetime import datetime
 
 #Global variables
 #Pilot CID in scope of webhook
-# Longdong
+# Discord webhook url
+# Displayname for the bot on Discord
 cid = sys.argv[1]
 url = sys.argv[2]
 username = sys.argv[3]
 
 def create_Body():
+  if flightplan is None:
     #Content body
     jsoncontent = {
       "username": username,
-      "content": "ATTN CONTROLLERS! " + cid + "has connected to VATSIM AT " + formatted_time_in_utc,
+      "content": "@everyone ATTN CONTROLLERS! " + "***" + name + "***" + " has connected to VATSIM AT " + formatted_time_in_utc,
+      "embeds": [
+        {
+          "fields": [
+            {
+              "name": "No flight plan has been pre-filed by this user.",
+              "value": "Flight details will only show if a flight plan is prefiled through simbrief"
+            },
+            {
+              "name": "Callsign",
+              "value": callsign
+            }
+          ],
+          "title": "Flight information"
+        }
+      ]
+    }
+  else:
+    #Content body
+    jsoncontent = {
+      "username": username,
+      "content": "ATTN CONTROLLERS! " + "***" + name + "***" + " has connected to VATSIM AT " + formatted_time_in_utc,
       "embeds": [
         {
           "fields": [
@@ -62,8 +85,8 @@ def create_Body():
       ]
     }
 
-    # Send body to webhook
-    requests.post(url, json = jsoncontent)
+  # Send body to webhook
+  requests.post(url, json = jsoncontent)
 
 ################################################################################
 
@@ -92,14 +115,16 @@ while True:
         callsign = x['callsign']
         flightplan = x['flight_plan']
         squawk = x['transponder']
-        aircraft = flightplan['aircraft']
-        dep = flightplan['departure']
-        arr = flightplan['arrival']
-        alternative = flightplan['alternate']
-        cruising_alt = flightplan['altitude']
-        rmks = flightplan['remarks']
-        route = flightplan['route']
         functionstatus = "Online"
+
+        if flightplan is not None:
+          aircraft = flightplan['aircraft']
+          dep = flightplan['departure']
+          arr = flightplan['arrival']
+          alternative = flightplan['alternate']
+          cruising_alt = flightplan['altitude']
+          rmks = flightplan['remarks']
+          route = flightplan['route']
 
         #UTC time now
         time_in_utc = datetime.utcnow()
