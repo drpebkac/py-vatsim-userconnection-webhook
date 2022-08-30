@@ -64,10 +64,6 @@ def create_Body():
               "value": alternative
             },
             {
-              "name": "Arrival",
-              "value": arr
-            },
-            {
               "name": "Cruise Alt",
               "value": cruising_alt
             },
